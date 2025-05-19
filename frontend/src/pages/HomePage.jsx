@@ -8,7 +8,7 @@ import NotesNotFound from "../components/NotesNotFound";
 const HomePage=()=>{
     const [isRateLimited,setIsRateLimited]=useState(false);
     const [notes,setNotes]=useState([]);
-    const [loading,setLoading]=useState();
+    const [loading,setLoading]=useState(true);
      useEffect(()=>{
       const fetchNotes=async() =>{
         try {
@@ -19,7 +19,7 @@ const HomePage=()=>{
             toast.success("Welcome");
         } catch (error) {
             console.error(error.response.status);
-            if(error.response.status===429){
+            if(error?.response?.status===429){
                 setIsRateLimited(true);
             }
             else{
@@ -40,7 +40,7 @@ const HomePage=()=>{
            {loading && <div className="text-center text-white">Loading...</div>}
          </div>
          {notes.length==0 && !isRateLimited &&<NotesNotFound/>}
-         {notes.length>0 && !isRateLimited && (
+         { Array.isArray(notes) &&  notes.length>0 && !isRateLimited && (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mx-5 my-[5rem]">
              {
                 notes.map((note)=>(
